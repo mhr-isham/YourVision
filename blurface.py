@@ -2,12 +2,12 @@ import cv2
 import numpy as np
 import time
 
-CAM_INDEX = 1  # Change this if you have multiple cameras
+CAM_INDEX = 0  # Change this if you have multiple cameras
 FRAME_WIDTH = 1280
 FRAME_HEIGHT = 720
-SCALE_FACTOR = 1
-BLUR_TYPE = 'Gaussian'
-PIXELATE_BLOCK_SIZE = 10
+SCALE_FACTOR = 1.1
+BLUR_TYPE = 'Gaus'
+PIXELATE_BLOCK_SIZE = 20
 GAUSSIAN_KERNEL_SIZE = (35, 35)
 SHOW_DETECTION_RECT=False
 
@@ -17,20 +17,20 @@ face_cascade = cv2.CascadeClassifier(cascade_path)
 if face_cascade.empty():
     raise RuntimeError(f'Failed to load cascade at {cascade_path}')
 
-def apply_blur{roi, ksize=GAUSSIAN_KERNEL_SIZE}:
+def apply_blur(roi, ksize=GAUSSIAN_KERNEL_SIZE):
     kx, ky = ksize
-    if kx % 2 == 0: kx += 1 else kx
-    if ky % 2 == 0: ky += 1 else ky
+    kx = kx + 1 if kx % 2 == 0 else kx
+    ky = ky + 1 if ky % 2 == 0 else ky
     return cv2.GaussianBlur(roi, (kx, ky), 0)
 
-def apply_pixelate{roi, block_size=PIXELATE_BLOCK_SIZE}:
+def apply_pixelate(roi, block_size=PIXELATE_BLOCK_SIZE):
     (h, w) = roi.shape[:2]
     x = max(1, w // block_size)
     y = max(1, h // block_size)
     temp = cv2.resize(roi, (x,y), interpolation=cv2.INTER_LINEAR)
     return cv2.resize(temp, (w, h), interpolation=cv2.INTER_NEAREST)
 
-def detect_faces{gray, scale=SCALE_FACTOR}:
+def detect_faces(gray, scale=SCALE_FACTOR):
     faces = face_cascade.detectMultiScale(
         gray, 
         scaleFactor=scale, 
@@ -55,6 +55,7 @@ def main():
     fps = 0
     frame_count = 0
     t0=time.time()
+    paused = 0
     print('Starting video stream. Press q to quit. s to toggle blur type. f to toggle rects. p to pause.')
     while True:
         if not paused:
@@ -72,7 +73,7 @@ def main():
                 roi = frame[y:y2, x:x2]
                 if roi.size == 0:
                     continue
-                if BLUR_Type == 'Gaussian':
+                if BLUR_TYPE == 'Gaussian':
                     blurred_roi = apply_blur(roi)
                 else:
                     blurred_roi = apply_pixelate(roi)
