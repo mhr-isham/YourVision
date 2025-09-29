@@ -42,13 +42,16 @@ while cap.isOpened():
         points={}
         for idx, landmark in enumerate(landmarks):
             points[idx] = (int(landmark.x * width), int(landmark.y * height))
+
+        # circle head
         nose_x, nose_y = points[mp_pose.PoseLandmark.NOSE]
         head_radius = int(0.1 * height)  
-        cv2.circle(stickman, (nose_x, nose_y), head_radius, (0,0,0), 2)  # White circle with thickness 2  
+        cv2.circle(stickman, (nose_x, nose_y), head_radius, (0,0,0), 2)  
 
 
         connections = [
-    
+
+            #Hands and Arms
             (mp_pose.PoseLandmark.LEFT_SHOULDER, mp_pose.PoseLandmark.RIGHT_SHOULDER),
             (mp_pose.PoseLandmark.LEFT_SHOULDER, mp_pose.PoseLandmark.LEFT_ELBOW),
             (mp_pose.PoseLandmark.LEFT_ELBOW, mp_pose.PoseLandmark.LEFT_WRIST),
