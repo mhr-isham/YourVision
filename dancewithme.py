@@ -5,6 +5,7 @@ import datetime
 
 is_recording = False
 video_writer = None
+camera_index = input("Enter camera index (default is 0): ")
 
 mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
@@ -13,8 +14,7 @@ mp_hands = mp.solutions.hands
 pose = mp_pose.Pose()
 hands = mp_hands.Hands(max_num_hands=2, min_detection_confidence=0.5, min_tracking_confidence=0.5)
 
-
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(int(camera_index) if camera_index.isdigit() else 0)
 
 while cap.isOpened():
     ret, frame = cap.read()
