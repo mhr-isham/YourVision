@@ -3,7 +3,7 @@ import numpy as np
 import time
 import datetime
 
-CAM_INDEX = 0  # Change this if you have multiple cameras
+CAM_INDEX = 1  # Change this if you have multiple cameras
 FRAME_WIDTH = 1280
 FRAME_HEIGHT = 720
 SCALE_FACTOR = 1.1
