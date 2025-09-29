@@ -1,6 +1,10 @@
 import cv2
 import mediapipe as mp
 import numpy as np
+import datetime
+
+is_recording = False
+video_writer = None
 
 mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
@@ -84,10 +88,39 @@ while cap.isOpened():
                 end_point = (int(end.x * width), int(end.y * height))
                 cv2.line(stickman, start_point, end_point, (0, 0, 0), 2)
 
-    cv2.imshow('Dance with Me - Original', frame)
-    cv2.imshow('Dance with Me - Stickman', stickman)
+    cv2.imshow('Dance with Me - Original(PRESS q TO EXIT)', frame)
+    cv2.imshow("Dance with Me - Stickman(PRESS 's' for a snapshot, 'r' to record)", stickman)
 
-    if cv2.waitKey(1) & 0xFF == ord('q'):
+    key = cv2.waitKey(1) & 0xFF
+    if key == ord('s'):  # Press 's' to save a snapshot
+        timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+        filename = f'dancewithme_snapshot_{timestamp}.png'
+        cv2.imwrite(filename, stickman)
+        print(f"Snapshot saved as '{filename}'")
+
+    if key == ord('r'):  # Press 'r' to start/stop recording
+        if not is_recording:
+            #Start Recording
+            timestamp=datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+            filename=f'dancewithme_recording_{timestamp}.avi'
+            fourcc = cv2.VideoWriter_fourcc(*'XVID')
+            video_writer = cv2.VideoWriter(filename, fourcc, 20.0, (width, height))
+            is_recording = True
+            print("Recording started...")
+
+        else:
+            #Stop Recording
+            is_recording = False
+            video_writer.release()
+            video_writer = None
+            print("Recording stopped.")
+
+    if is_recording and video_writer is not None:
+        video_writer.write(stickman)
+
+    if key == ord('q'):  # Press 'q' to exit
+        if is_recording:
+            video_writer.release() #Save recording before closing
         break
 
 cap.release()
