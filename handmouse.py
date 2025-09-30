@@ -1,8 +1,7 @@
 import cv2
 import mediapipe as mp
 import pyautogui
-import warnings
-warnings.filterwarnings("ignore")
+
 
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands(max_num_hands=1, min_detection_confidence=0.5, min_tracking_confidence=0.5)
@@ -36,7 +35,7 @@ while True:
             curr_x = prev_x + (screen_x - prev_x) / smoothen
             curr_y = prev_y + (screen_y - prev_y) / smoothen
 
-            #pyautogui.moveTo(curr_x, curr_y)
+            pyautogui.moveTo(curr_x, curr_y)
 
             hand_type = handedness.classification[0].label
             prev_x, prev_y = curr_x, curr_y
@@ -65,6 +64,10 @@ while True:
                 pinky_folded_xdir = hand_landmarks.landmark[20].x < hand_landmarks.landmark[18].x
 
             '''
+            Test back side and palm side
+
+
+        
             gesture_state = {
                 "thumb_open_ydir": False,
                 "index_folded_xdir": False,
@@ -112,22 +115,22 @@ while True:
             
 
             # LEFT CLICK
-            if index_folded_ydir and middle_folded_ydir and ring_folded_ydir and pinky_folded_ydir and not thumb_open_ydir:
-               # pyautogui.click()
-               # pyautogui.mouseDown()
+            if index_folded_ydir and middle_folded_ydir and ring_folded_ydir and pinky_folded_ydir:
+                pyautogui.click()
+                pyautogui.mouseDown()
                 cv2.putText(frame, "Fist=Left click/drag", (10, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)  
-            #else:
-                #pyautogui.mouseUp() 
+            else:
+                pyautogui.mouseUp() 
             
             # RIGHT CLICK
             if (thumb_open_ydir and index_folded_xdir and middle_folded_xdir and ring_folded_xdir and pinky_folded_xdir ):
-                #pyautogui.rightClick()
+                pyautogui.mouseUp()
+                pyautogui.rightClick()
                 cv2.putText(frame, "Thumbs Up = Right Click", (10, 150), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
+                
 
-            
-
-    #else:
-        #pyautogui.mouseUp()
+    else:
+        pyautogui.mouseUp()
 
     cv2.imshow("Hand Mouse(press q to exit, Fist > Left click/drag, Thumbs Up = Right Click)", frame)
 
