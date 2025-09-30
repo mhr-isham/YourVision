@@ -39,34 +39,79 @@ while True:
             #pyautogui.moveTo(curr_x, curr_y)
 
             hand_type = handedness.classification[0].label
+            prev_x, prev_y = curr_x, curr_y
 
+
+            #4 fingers y directions fold
             index_folded_ydir = hand_landmarks.landmark[8].y > hand_landmarks.landmark[6].y
             middle_folded_ydir = hand_landmarks.landmark[12].y > hand_landmarks.landmark[10].y
             ring_folded_ydir = hand_landmarks.landmark[16].y > hand_landmarks.landmark[14].y
             pinky_folded_ydir = hand_landmarks.landmark[20].y > hand_landmarks.landmark[18].y
+            thumb_open_ydir = hand_landmarks.landmark[4].y < hand_landmarks.landmark[3].y
 
-            index_folded_xdir = hand_landmarks.landmark[8].x < hand_landmarks.landmark[6].x
-            middle_folded_xdir = hand_landmarks.landmark[12].x < hand_landmarks.landmark[10].x
-            ring_folded_xdir = hand_landmarks.landmark[16].x < hand_landmarks.landmark[14].x
-            pinky_folded_xdir = hand_landmarks.landmark[20].x < hand_landmarks.landmark[18].x
-
+            #hand detection and thumb open y direction
             if hand_type == "Right":
                 cv2.putText(frame, "Right Hand detected", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-                thumb_open_ydir = hand_landmarks.landmark[4].y < hand_landmarks.landmark[3].y
+                index_folded_xdir = hand_landmarks.landmark[8].x < hand_landmarks.landmark[6].x
+                middle_folded_xdir = hand_landmarks.landmark[12].x < hand_landmarks.landmark[10].x
+                ring_folded_xdir = hand_landmarks.landmark[16].x < hand_landmarks.landmark[14].x
+                pinky_folded_xdir = hand_landmarks.landmark[20].x < hand_landmarks.landmark[18].x
+                
             else:
                 cv2.putText(frame, "Left Hand detected", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-                thumb_open_ydir = hand_landmarks.landmark[4].y < hand_landmarks.landmark[3].y
+                index_folded_xdir = hand_landmarks.landmark[8].x > hand_landmarks.landmark[6].x
+                middle_folded_xdir = hand_landmarks.landmark[12].x > hand_landmarks.landmark[10].x
+                ring_folded_xdir = hand_landmarks.landmark[16].x > hand_landmarks.landmark[14].x
+                pinky_folded_xdir = hand_landmarks.landmark[20].x > hand_landmarks.landmark[18].x
 
+            gesture_state = {
+                "thumb_open_ydir": False,
+                "index_folded_xdir": False,
+                "index_folded_ydir": False,
+                "middle_folded_xdir": False,
+                "middle_folded_ydir": False,
+                "ring_folded_xdir": False,
+                "ring_folded_ydir": False,
+                "pinky_folded_xdir": False,
+                "pinky_folded_ydir": False
+            }
+
+            # Inside your while True loop
+            def check_and_print(gesture_name, condition, message):
+                if condition and not gesture_state[gesture_name]:
+                    print(message)
+                    gesture_state[gesture_name] = True
+                elif not condition:
+                    gesture_state[gesture_name] = False
+
+
+            check_and_print("thumb_open_ydir", thumb_open_ydir, "Thumb open")
+            check_and_print("index_folded_xdir", index_folded_xdir, "Index folded - X dir")
+            check_and_print("index_folded_ydir", index_folded_ydir, "Index folded - Y dir")
+            check_and_print("middle_folded_xdir", middle_folded_xdir, "Middle folded - X dir")
+            check_and_print("middle_folded_ydir", middle_folded_ydir, "Middle folded - Y dir")
+            check_and_print("ring_folded_xdir", ring_folded_xdir, "Ring folded - X dir")
+            check_and_print("ring_folded_ydir", ring_folded_ydir, "Ring folded - Y dir")
+            check_and_print("pinky_folded_xdir", pinky_folded_xdir, "Pinky folded - X dir")
+            check_and_print("pinky_folded_ydir", pinky_folded_ydir, "Pinky folded - Y dir")  
+
+            '''
+
+            # LEFT CLICK
             if index_folded_ydir and middle_folded_ydir and ring_folded_ydir and pinky_folded_ydir and not thumb_open_ydir:
-                #pyautogui.click()
-                #pyautogui.mouseDown()
+                pyautogui.click()
+                pyautogui.mouseDown()
                 cv2.putText(frame, "Fist=Left click/drag", (10, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)  
             else:
                 pyautogui.mouseUp() 
             
-            if (thumb_open_ydir and index_folded_ydir and middle_folded_ydir and ring_folded and pinky_folded_ydir ):
-                #pyautogui.rightClick()
+            # RIGHT CLICK
+            if (thumb_open_ydir and index_folded_xdir and middle_folded_xdir and ring_folded_xdir and pinky_folded_xdir ):
+                pyautogui.rightClick()
                 cv2.putText(frame, "Thumbs Up = Right Click", (10, 150), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
+
+            '''
+
     #else:
         #pyautogui.mouseUp()
 
