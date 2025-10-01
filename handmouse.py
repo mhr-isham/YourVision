@@ -110,8 +110,7 @@ while True:
                 hand_side = "Back of hand facing camera"
 
             print(handedness.classification[0].label, hand_side)
-            '''
-            
+            '''          
 
             # LEFT CLICK
             if index_folded_ydir and middle_folded_ydir and ring_folded_ydir and pinky_folded_ydir:
