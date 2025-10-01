@@ -111,7 +111,6 @@ while True:
 
             print(handedness.classification[0].label, hand_side)
             '''
-
             
 
             # LEFT CLICK
@@ -128,7 +127,6 @@ while True:
                 pyautogui.rightClick()
                 cv2.putText(frame, "Thumbs Up = Right Click", (10, 150), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
                 
-
     else:
         pyautogui.mouseUp()
 
