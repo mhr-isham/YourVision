@@ -3,6 +3,8 @@ import mediapipe as mp
 import numpy as np
 import datetime
 
+
+
 is_recording = False
 video_writer = None
 camera_index = input("Enter camera index (default is 0): ")
