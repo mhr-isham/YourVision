@@ -98,7 +98,7 @@ while cap.isOpened():
 
     key = cv2.waitKey(1) & 0xFF
     if key == ord('s'):  # Press 's' to save a snapshot
-        timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+        timestamp = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
         filename = f'dancewithme_snapshot_{timestamp}.png'
         cv2.imwrite(filename, stickman)
         print(f"Snapshot saved as '{filename}'")
@@ -106,7 +106,7 @@ while cap.isOpened():
     if key == ord('r'):  # Press 'r' to start/stop recording
         if not is_recording:
             #Start Recording
-            timestamp=datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+            timestamp=datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
             filename=f'dancewithme_recording_{timestamp}.avi'
             fourcc = cv2.VideoWriter_fourcc(*'XVID')
             video_writer = cv2.VideoWriter(filename, fourcc, 20.0, (width, height))

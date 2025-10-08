@@ -15,7 +15,7 @@ while True:
     color = cv2.bilateralFilter(frame, d=9, sigmaColor=200, sigmaSpace=200)
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     gray = cv2.medianBlur(gray, 7)
-    edges = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, blockSize=10, C=8)
+    edges = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, blockSize=11, C=8)
     cartoon = cv2.bitwise_and(color, color, mask=edges)
     stylized = cv2.stylization(frame, sigma_s=270, sigma_r=0.55)
 
@@ -26,13 +26,13 @@ while True:
     key =cv2.waitKey(1) & 0xFF
     if key == ord('q'):
         break
-    elif key == ord('s')
-        timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+    elif key == ord('s'):
+        timestamp = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
         filename = f'cartoon_avatar_{timestamp}.png'
         cv2.imwrite(filename, cartoon)
         print(f"Avatar version 1 - Cartoonized version saved as '{filename}'")
-    elif key == ord('c')
-        timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+    elif key == ord('c'):
+        timestamp = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
         filename = f'stylized_avatar_{timestamp}.png'
         cv2.imwrite(filename, stylized)
         print("Avatar version 2 - Stylized version saved as '{filename}'")

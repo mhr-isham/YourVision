@@ -3,7 +3,7 @@ import numpy as np
 import time
 import datetime
 
-CAM_INDEX = 1  # Change this if you have multiple cameras
+camera_index = input("Enter camera index (default is 0): ")
 FRAME_WIDTH = 1280
 FRAME_HEIGHT = 720
 SCALE_FACTOR = 1.1
@@ -46,7 +46,7 @@ def main():
     global BLUR_TYPE, SHOW_DETECTION_RECT, recording, video_writer
 
     
-    cap = cv2.VideoCapture(CAM_INDEX)
+    cap = cv2.VideoCapture(int(camera_index) if camera_index.isdigit() else 0)
     if not cap.isOpened():
         raise RuntimeError(f'Failed to open camera with index {CAM_INDEX}')
         return
